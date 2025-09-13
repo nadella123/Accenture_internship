@@ -3,27 +3,24 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Salesforce Certificate</title>
-  <style>
-    body {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      min-height: 100vh;
-      margin: 0;
-    }
-    embed, iframe {
-      width: 90%;
-      height: 90vh; /* Adjust height as needed */
-      border: none;
-    }
-  </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/2.16.105/pdf.min.js"></script>
 </head>
-<body>
-  <!-- Option 1: Using embed -->
-  <embed src="internship.pdf" type="application/pdf">
+<body style="display:flex;justify-content:center;align-items:center;min-height:100vh;margin:0;">
+  <canvas id="pdf-canvas"></canvas>
 
-  <!-- Option 2: Using iframe -->
-  <!-- <iframe src="internship.pdf"></iframe> -->
+  <script>
+    const url = "internship.pdf"; // your certificate PDF
+    const canvas = document.getElementById("pdf-canvas");
+    const context = canvas.getContext("2d");
+
+    pdfjsLib.getDocument(url).promise.then(pdf => {
+      pdf.getPage(1).then(page => {  // show only page 1
+        const viewport = page.getViewport({ scale: 1.5 });
+        canvas.height = viewport.height;
+        canvas.width = viewport.width;
+        page.render({ canvasContext: context, viewport: viewport });
+      });
+    });
+  </script>
 </body>
 </html>
